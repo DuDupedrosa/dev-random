@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Card,
@@ -6,28 +6,27 @@ import {
   CardHeader,
   CardTitle,
   CardContent,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { FaCopy, FaLightbulb } from "react-icons/fa6";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useEffect, useState } from "react";
-import { documentsEnum, DocumentsEnum } from "@/shared/enums/documentsEnum";
-import { copyToClipboard } from "@/shared/helpers/copyToClipboard";
-import { generateRandomDocument } from "@/shared/helpers/generateRandomDocument";
-import { documentsOptionsList } from "@/shared/data/documents";
-import Link from "next/link";
-import ImageRocket from "@/assets/images/rocket.png";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/select';
+import { FaCopy, FaLightbulb } from 'react-icons/fa6';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useEffect, useState } from 'react';
+import { documentsEnum, DocumentsEnum } from '@/shared/enums/documentsEnum';
+import { copyToClipboard } from '@/shared/helpers/copyToClipboard';
+import { generateRandomDocument } from '@/shared/helpers/generateRandomDocument';
+import { documentsOptionsList } from '@/shared/data/documents';
+import ImageRocket from '@/assets/images/rocket.png';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 function RandomValueValueAndCopyButton({
   value,
@@ -43,7 +42,7 @@ function RandomValueValueAndCopyButton({
         onClick={() => onCopy()}
         title="Copiar"
         className="cursor-pointer transition-transform hover:scale-105"
-        size={"icon"}
+        size={'icon'}
       >
         <FaCopy />
       </Button>
@@ -54,7 +53,7 @@ function RandomValueValueAndCopyButton({
 export default function DocumentsComponent() {
   const [selectedDocumentType, setSelectedDocumentType] =
     useState<DocumentsEnum>(documentsEnum.CPF);
-  const [generatedValue, setGeneratedValue] = useState<string>("");
+  const [generatedValue, setGeneratedValue] = useState<string>('');
   const [formatOnGenerate, setFormatOnGenerate] = useState<boolean>(true);
   const [showFormatOption, setShowFormatOption] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -82,7 +81,7 @@ export default function DocumentsComponent() {
 
   function handleClean() {
     setFormatOnGenerate(true);
-    setGeneratedValue("");
+    setGeneratedValue('');
   }
 
   useEffect(() => {
@@ -108,8 +107,8 @@ export default function DocumentsComponent() {
         </CardTitle>
         <CardDescription className="text-base">
           <p className="mb-1">
-            Selecione o tipo de documento abaixo e clique em{" "}
-            <span className="font-semibold">{"Gerar"}</span> para criar um valor
+            Selecione o tipo de documento abaixo e clique em{' '}
+            <span className="font-semibold">{'Gerar'}</span> para criar um valor
             aleatório. <br /> Ideal para testes e prototipação.
           </p>
         </CardDescription>
@@ -143,12 +142,12 @@ export default function DocumentsComponent() {
           <div className="flex flex-col space-y-4">
             <div
               className={`flex items-center transition-all duration-300 cursor ${
-                showFormatOption ? "opacity-100" : "opacity-0"
+                showFormatOption ? 'opacity-100' : 'opacity-0'
               }`}
             >
               <Checkbox
                 className={`${
-                  showFormatOption ? "cursor-pointer" : "cursor-default"
+                  showFormatOption ? 'cursor-pointer' : 'cursor-default'
                 }`}
                 checked={formatOnGenerate}
                 id="pontuacao"
@@ -157,7 +156,7 @@ export default function DocumentsComponent() {
               <Label
                 htmlFor="pontuacao"
                 className={`text-sm pl-2 ${
-                  showFormatOption ? "cursor-pointer" : "cursor-default"
+                  showFormatOption ? 'cursor-pointer' : 'cursor-default'
                 }`}
               >
                 Gerar com pontuação
@@ -170,7 +169,7 @@ export default function DocumentsComponent() {
                 onClick={handleGenerateValue}
                 title="Gerar"
                 className={`flex-1 bg-violet-500 hover:bg-violet-600 transition-transform hover:scale-105 ${
-                  loading ? "cursor-wait" : "cursor-pointer"
+                  loading ? 'cursor-wait' : 'cursor-pointer'
                 }`}
               >
                 Gerar
@@ -181,7 +180,7 @@ export default function DocumentsComponent() {
                 title="Limpar"
                 variant="outline"
                 className={`flex-1 cursor-pointer hover:bg-violet-50 transition-transform hover:scale-105 ${
-                  loading ? "cursor-wait" : "cursor-pointer"
+                  loading ? 'cursor-wait' : 'cursor-pointer'
                 }`}
               >
                 Limpar
@@ -199,8 +198,8 @@ export default function DocumentsComponent() {
               ) : (
                 <span className="block text-sm">
                   {loading
-                    ? "Gerando..."
-                    : "   Nenhum documento foi gerado ainda — clique em Gerar para começar."}
+                    ? 'Gerando...'
+                    : '   Nenhum documento foi gerado ainda — clique em Gerar para começar.'}
                 </span>
               )}
             </div>
@@ -212,7 +211,7 @@ export default function DocumentsComponent() {
             <AlertDescription>
               <p>
                 Este site foi criado para fins de testes e desenvolvimento. Os
-                dados gerados são válidos em formato,{" "}
+                dados gerados são válidos em formato,{' '}
                 <span className="font-bold">
                   não representam informações reais
                 </span>
@@ -226,13 +225,13 @@ export default function DocumentsComponent() {
           <div className="grid grid-cols-[20px_1fr] mb-3">
             <FaLightbulb className="text-yellow-500 w-5" />
             <p className="text-sm text-gray-800">
-              Precisa automatizar a geração de documentos? Use nossa{" "}
+              Precisa automatizar a geração de documentos? Use nossa{' '}
               <span className="font-bold">API gratuita</span> para integrar em
               seus testes e projetos.
             </p>
           </div>
           <Button
-            onClick={() => router.push("/api-docs")}
+            onClick={() => router.push('/api-docs')}
             variant="default"
             className="bg-violet-500 cursor-pointer hover:bg-violet-600 transition-transform hover:scale-105"
           >
