@@ -1,22 +1,15 @@
 import { prisma } from '@/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import bcrypt from 'bcrypt';
 import { httpStatusEnum } from '@/shared/enums/httpStatusEnum';
 import { User } from '@/types/user';
 import { generateToken } from '../../helpers/jwt';
-
-const userSchema = z.object({
-  name: z.string(),
-  password: z.string().min(6),
-  email: z.email(),
-  lastName: z.string().nullable(),
-});
+import registerUserSchema from '../schemas/regisetrUserSchema';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const validationDtoResult = userSchema.safeParse(body);
+    const validationDtoResult = registerUserSchema.safeParse(body);
 
     if (!validationDtoResult.success) {
       return NextResponse.json(
@@ -29,7 +22,9 @@ export async function POST(request: NextRequest) {
     }
 
     const existingUser = await prisma.user.findUnique({
-      where: { email: validationDtoResult.data.email },
+      where: {
+        normalizedEmail: validationDtoResult.data.email.toUpperCase(),
+      },
     });
 
     if (existingUser) {
@@ -50,8 +45,11 @@ export async function POST(request: NextRequest) {
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...user } = await prisma.user.create({
-      data: newUser,
+    const { normalizedEmail, password, ...user } = await prisma.user.create({
+      data: {
+        normalizedEmail: validationDtoResult.data.email.toUpperCase(),
+        ...newUser,
+      },
     });
 
     const token = generateToken(user.id, user.email);

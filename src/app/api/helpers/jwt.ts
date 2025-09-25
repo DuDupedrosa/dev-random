@@ -11,14 +11,6 @@ export function generateToken(userId: string, email: string): string {
   return token;
 }
 
-// method to verify token
-// to get user data, use:
-// const result = verifyToken(token);
-// if (result.valid)
-// console.log("ID:", result.decoded.id);
-// console.log("Email:", result.decoded.email);
-// else
-// console.log("Token inválido");
 export function verifyToken(token: string, request?: NextRequest) {
   try {
     let tokenToVerify = token;
