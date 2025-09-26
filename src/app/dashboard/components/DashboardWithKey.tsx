@@ -11,9 +11,10 @@ import {
   InfoIcon,
 } from 'lucide-react';
 import { copyToClipboard } from '@/shared/helpers/copyToClipboard';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AlertActionDialog from '@/components/native/AlertActionDialog';
 import { FiBookOpen } from 'react-icons/fi';
+import { http } from '@/app/api/http';
 
 const regenerateKeyDialogText = {
   title: 'Deseja realmente gerar uma nova chave de API?',
@@ -30,6 +31,20 @@ const deleteKeyDialogText = {
 export default function DashboardWithKey() {
   const [isRegenerateAlertOpen, setIsRegenerateAlertOpen] = useState(false);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const { data } = await http.get('/api/user');
+
+        console.log('%c⧭', 'color: #733d00', data.content);
+      } catch (err) {
+        console.log('%c⧭', 'color: #00bf00', err);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   return (
     <Card className="w-full mx-auto mt-12 max-w-3xl shadow-lg rounded-3xl transition-shadow hover:shadow-xl">

@@ -16,23 +16,34 @@ import Register from './components/Register';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
+import { useAuth } from '@/app/providers/AuthContext';
+import { http } from '@/app/api/http';
 
 export default function AuthenticatePage() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { clearUser } = useAuth();
 
   useEffect(() => {
+    const logout = async () => {
+      try {
+        await http.post('/api/user/logout');
+      } finally {
+        clearUser();
+      }
+    };
+
     if (
       searchParams.get('error') &&
       searchParams.get('error') === 'unauthorized'
     ) {
-      window.localStorage.clear();
       router.replace('/user/authenticate', { scroll: false });
+      logout();
       setTimeout(() => {
         toast.error('Sua sessão expirou. Faça login novamente.');
       }, 100);
     }
-  }, [searchParams, router]);
+  }, [searchParams]);
 
   return (
     <MainSection>

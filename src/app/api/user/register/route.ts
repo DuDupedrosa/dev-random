@@ -5,6 +5,7 @@ import { httpStatusEnum } from '@/shared/enums/httpStatusEnum';
 import { User } from '@/types/user';
 import { generateToken } from '../../helpers/jwt';
 import registerUserSchema from '../schemas/regisetrUserSchema';
+import { serialize } from 'cookie';
 
 export async function POST(request: NextRequest) {
   try {
@@ -63,15 +64,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const response: { user: User; token: string } = {
-      user,
-      token,
-    };
+    const serializedCookie = serialize('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+      maxAge: 30 * 60, // 30 minutos
+    });
 
-    return NextResponse.json(
-      { content: response },
+    const response = NextResponse.json(
+      { content: user },
       { status: httpStatusEnum.CREATED }
     );
+    response.headers.set('Set-Cookie', serializedCookie);
+
+    return response;
   } catch (err) {
     return NextResponse.json(
       { error: `InternalServerError|RegisterUser|Error: ${err}` },

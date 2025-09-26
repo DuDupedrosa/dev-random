@@ -11,16 +11,23 @@ export function generateToken(userId: string, email: string): string {
   return token;
 }
 
+// função pronta para receber token no cookie ou Bearer {token}
+// mas o projeto só usa cookie.
 export function verifyToken(token: string, request?: NextRequest) {
   try {
     let tokenToVerify = token;
 
     if (!token && request) {
-      const authHeader = request.headers.get('authorization');
-      if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return { valid: false, decoded: null };
+      const savedTokenCookie = request.cookies.get('token')?.value;
+      if (savedTokenCookie) {
+        tokenToVerify = savedTokenCookie;
+      } else {
+        const authHeader = request.headers.get('authorization');
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+          return { valid: false, decoded: null };
+        }
+        tokenToVerify = authHeader.split(' ')[1];
       }
-      tokenToVerify = authHeader.split(' ')[1];
     }
 
     const decoded = jwt.verify(tokenToVerify, SECRET_KEY) as {

@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import loginUserSchema from '../schemas/loginUserSchema';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcrypt';
-import { User } from '@/types/user';
 import { generateToken } from '../../helpers/jwt';
+import { serialize } from 'cookie'; // npm i cookie
 
 export async function POST(request: NextRequest) {
   try {
@@ -49,18 +49,23 @@ export async function POST(request: NextRequest) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, normalizedEmail, ...user } = findUser;
 
-    const response: {
-      user: User;
-      token: string;
-    } = {
-      user: user,
-      token: generateToken(findUser.id, findUser.email),
-    };
+    const token = generateToken(findUser.id, findUser.email);
 
-    return NextResponse.json(
-      { content: response },
+    const serializedCookie = serialize('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+      maxAge: 30 * 60, // 30 minutos
+    });
+
+    const response = NextResponse.json(
+      { content: user },
       { status: httpStatusEnum.OK }
     );
+    response.headers.set('Set-Cookie', serializedCookie);
+
+    return response;
   } catch (err) {
     return NextResponse.json(
       { message: `InternalServerError|Login|Error: ${err}` },
