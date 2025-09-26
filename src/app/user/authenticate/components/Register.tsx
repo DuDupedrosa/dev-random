@@ -22,6 +22,7 @@ import AlertError from '@/components/native/AlertError';
 import { Loader2Icon } from 'lucide-react';
 import { AxiosError } from 'axios';
 import { httpStatusEnum } from '@/shared/enums/httpStatusEnum';
+import { useAuth } from '@/app/providers/AuthContext';
 
 const formSchema = z.object({
   name: z.string().min(1, 'O nome é obrigatório'),
@@ -40,6 +41,7 @@ export default function Register() {
   const [alert, setAlert] = useState<{ show: boolean; message: string } | null>(
     null
   );
+  const { setUser } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -57,9 +59,8 @@ export default function Register() {
     try {
       const payload = { ...values };
       const { data } = await http.post('/api/user/register', payload);
-      const { user, token } = data.content;
-      window.localStorage.setItem('user', JSON.stringify(user));
-      window.localStorage.setItem('token', token);
+      const { content: user } = data;
+      setUser(user);
       toast.success('Conta criada com sucesso!');
       router.push('/dashboard');
     } catch (err) {

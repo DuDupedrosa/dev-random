@@ -20,6 +20,7 @@ import { AxiosError } from 'axios';
 import { httpStatusEnum } from '@/shared/enums/httpStatusEnum';
 import AlertError from '@/components/native/AlertError';
 import { Loader2Icon } from 'lucide-react';
+import { useAuth } from '@/app/providers/AuthContext';
 
 const formSchema = z.object({
   email: z.email({ error: 'Email inválido' }).min(1, 'O email é obrigatório'),
@@ -36,6 +37,7 @@ export default function Login() {
   const [alert, setAlert] = useState<{ show: boolean; message: string } | null>(
     null
   );
+  const { setUser } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,29 +51,22 @@ export default function Login() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
     setAlert(null);
+
     try {
-      const payload = { ...values };
-      const { data } = await http.post('/api/user/login', payload);
-      const { user, token } = data.content;
-      window.localStorage.setItem('user', JSON.stringify(user));
-      window.localStorage.setItem('token', token);
+      const { data } = await http.post('/api/user/login', values);
+      const { content: user } = data;
+      setUser(user);
       router.push('/dashboard');
     } catch (err) {
       if (err instanceof AxiosError) {
-        if (err.response) {
-          const status = err.response.status;
-
-          if (status === httpStatusEnum.NOT_FOUND) {
-            setAlert({
-              show: true,
-              message: 'Não encontramos nenhuma conta com este e-mail.',
-            });
-          } else if (status === httpStatusEnum.BAD_REQUEST) {
-            setAlert({
-              show: true,
-              message: 'E-mail ou senha incorretos.',
-            });
-          }
+        const status = err.response?.status;
+        if (status === httpStatusEnum.NOT_FOUND) {
+          setAlert({
+            show: true,
+            message: 'Não encontramos nenhuma conta com este e-mail.',
+          });
+        } else if (status === httpStatusEnum.BAD_REQUEST) {
+          setAlert({ show: true, message: 'E-mail ou senha incorretos.' });
         }
       }
     } finally {
