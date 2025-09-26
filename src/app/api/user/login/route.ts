@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     if (!isPasswordValid) {
       return NextResponse.json(
         { message: 'Invalid credentials' },
-        { status: httpStatusEnum.UNAUTHORIZED }
+        { status: httpStatusEnum.BAD_REQUEST }
       );
     }
 

@@ -1,3 +1,5 @@
+'use client';
+
 import MainHeader from '@/components/native/MainHeader';
 import MainSection from '@/components/native/MainSection';
 import {
@@ -11,8 +13,27 @@ import { IoLogInOutline } from 'react-icons/io5';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Login from './components/Login';
 import Register from './components/Register';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
 
 export default function AuthenticatePage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (
+      searchParams.get('error') &&
+      searchParams.get('error') === 'unauthorized'
+    ) {
+      window.localStorage.clear();
+      router.replace('/user/authenticate', { scroll: false });
+      setTimeout(() => {
+        toast.error('Sua sessão expirou. Faça login novamente.');
+      }, 100);
+    }
+  }, [searchParams, router]);
+
   return (
     <MainSection>
       <MainHeader />
@@ -27,7 +48,7 @@ export default function AuthenticatePage() {
               </span>
             </CardTitle>
             <CardDescription className="text-center text-base text-gray-900">
-              Escolha uma das opções abaixo para acessar / criar sua conta.
+              Entre ou cadastre-se para usar o gerador de dados aleatórios.
             </CardDescription>
           </CardHeader>
 
@@ -42,7 +63,7 @@ export default function AuthenticatePage() {
                     Entrar
                   </TabsTrigger>
                   <TabsTrigger value="register" className="cursor-pointer">
-                    Criar conta
+                    Cadastrar
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="login">

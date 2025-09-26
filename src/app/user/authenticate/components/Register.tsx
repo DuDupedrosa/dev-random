@@ -1,4 +1,5 @@
 'use client';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -14,6 +15,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FaEye, FaEyeSlash } from 'react-icons/fa6';
 import { useState } from 'react';
+import { http } from '@/app/api/http';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import AlertError from '@/components/native/AlertError';
+import { Loader2Icon } from 'lucide-react';
+import { AxiosError } from 'axios';
+import { httpStatusEnum } from '@/shared/enums/httpStatusEnum';
 
 const formSchema = z.object({
   name: z.string().min(1, 'O nome é obrigatório'),
@@ -27,6 +35,11 @@ const eyeIconStyles =
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
+  const [alert, setAlert] = useState<{ show: boolean; message: string } | null>(
+    null
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,11 +51,31 @@ export default function Register() {
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
+    setAlert(null);
+    try {
+      const payload = { ...values };
+      const { data } = await http.post('/api/user/register', payload);
+      const { user, token } = data.content;
+      window.localStorage.setItem('user', JSON.stringify(user));
+      window.localStorage.setItem('token', token);
+      toast.success('Conta criada com sucesso!');
+      router.push('/dashboard');
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        if (
+          err.response &&
+          err.response.status === httpStatusEnum.BAD_REQUEST
+        ) {
+          setAlert({
+            show: true,
+            message: 'E-mail já em uso. Tente outro ou faça login.',
+          });
+        }
+      }
+      setLoading(false);
+    }
   }
 
   function handleShowPassword() {
@@ -85,7 +118,7 @@ export default function Register() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="email@example.com" {...field} />
+                <Input placeholder="Seu email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -100,7 +133,7 @@ export default function Register() {
               <FormControl>
                 <div className="relative">
                   <Input
-                    placeholder="********"
+                    placeholder="Sua senha"
                     type={showPassword ? 'text' : 'password'}
                     {...field}
                   />
@@ -121,8 +154,16 @@ export default function Register() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full md:w-1/2 cursor-pointer">
-          Cadastrar
+
+        {alert && alert.show && <AlertError text={alert.message} />}
+
+        <Button
+          disabled={loading}
+          type="submit"
+          className="w-full md:w-1/2 cursor-pointer"
+        >
+          {loading && <Loader2Icon className="animate-spin" />}
+          Enviar
         </Button>
       </form>
     </Form>
