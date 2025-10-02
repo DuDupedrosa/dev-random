@@ -20,6 +20,13 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { FaEye, FaEyeSlash } from 'react-icons/fa6';
+import { http } from '@/app/api/http';
+import { useRouter } from 'next/navigation';
+import { AxiosError } from 'axios';
+import { httpStatusEnum } from '@/shared/enums/httpStatusEnum';
+import AlertError from '@/components/native/AlertError';
+import AlertSuccess from '@/components/native/AlertSuccess';
+import { Loader2Icon } from 'lucide-react';
 
 interface ChangePasswordDialogProps {
   open: boolean;
@@ -29,12 +36,17 @@ interface ChangePasswordDialogProps {
 const eyeIconStyles =
   'absolute right-3 top-[10px] w-4 h-4 transition-all hover:text-primary cursor-pointer';
 
-const formSchema = z.object({
-  currentPassword: z.string().min(1, 'A senha atual é obrigatória'),
-  newPassword: z
-    .string()
-    .min(6, 'A nova senha deve ter no mínimo 6 caracteres'),
-});
+const formSchema = z
+  .object({
+    currentPassword: z.string().min(1, 'A senha atual é obrigatória'),
+    newPassword: z
+      .string()
+      .min(6, 'A nova senha deve ter no mínimo 6 caracteres'),
+  })
+  .refine((data) => data.currentPassword !== data.newPassword, {
+    message: 'A nova senha deve ser diferente da senha atual',
+    path: ['newPassword'], // erro vai aparecer no campo de nova senha
+  });
 
 export default function ChangePasswordDialog({
   open,
@@ -43,6 +55,13 @@ export default function ChangePasswordDialog({
   const [isOpen, setIsOpen] = useState(open);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [alertError, setAlertError] = useState<{
+    show: boolean;
+    text: string;
+  } | null>(null);
+  const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,11 +71,28 @@ export default function ChangePasswordDialog({
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
+    setAlertError(null);
+    try {
+      await http.post('/api/user/change-password', values);
+      await http.post('/api/user/logout');
+      setShowSuccessAlert(true);
+      setTimeout(() => {
+        router.push('/user/authenticate?cleanUser=true');
+      }, 3000);
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        if (
+          err.response &&
+          err.response.status === httpStatusEnum.BAD_REQUEST
+        ) {
+          setAlertError({ show: true, text: 'A senha atual está incorreta.' });
+        }
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -89,7 +125,7 @@ export default function ChangePasswordDialog({
                   <FormControl>
                     <div className="relative">
                       <Input
-                        placeholder="********"
+                        placeholder="Sua senha atual"
                         type={showCurrentPassword ? 'text' : 'password'}
                         {...field}
                       />
@@ -123,7 +159,7 @@ export default function ChangePasswordDialog({
                   <FormControl>
                     <div className="relative">
                       <Input
-                        placeholder="********"
+                        placeholder="Sua nova senha"
                         type={showNewPassword ? 'text' : 'password'}
                         {...field}
                       />
@@ -145,11 +181,25 @@ export default function ChangePasswordDialog({
               )}
             />
 
+            {alertError && alertError.show && (
+              <AlertError text={alertError.text} />
+            )}
+
+            {showSuccessAlert && (
+              <AlertSuccess text="Senha alterada com sucesso! Aguarde, você será redirecionado para realizar login com a nova senha." />
+            )}
+
             <div className="grid grid-cols-2 gap-5">
-              <Button type="submit" className="w-full">
+              <Button
+                disabled={loading || showSuccessAlert}
+                type="submit"
+                className="w-full"
+              >
+                {loading && <Loader2Icon className="animate-spin" />}
                 Alterar senha
               </Button>
               <Button
+                disabled={loading || showSuccessAlert}
                 type="button"
                 onClick={() => onClose()}
                 className="w-full"

@@ -17,7 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-funnel-display">
         <AuthProvider>{children}</AuthProvider>
-        <Toaster richColors={true} position="top-right" />
+        <Toaster richColors={true} position="top-center" />
       </body>
     </html>
   );

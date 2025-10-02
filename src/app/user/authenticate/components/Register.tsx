@@ -35,9 +35,9 @@ const eyeIconStyles =
   'absolute right-3 top-[10px] w-4 h-4 transition-all hover:text-primary cursor-pointer';
 
 export default function Register() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const router = useRouter();
   const [alert, setAlert] = useState<{ show: boolean; message: string } | null>(
     null
   );
@@ -58,9 +58,7 @@ export default function Register() {
     setAlert(null);
     try {
       const payload = { ...values };
-      const { data } = await http.post('/api/user/register', payload);
-      const { content: user } = data;
-      setUser(user);
+      await http.post('/api/user/register', payload);
       toast.success('Conta criada com sucesso!');
       router.push('/dashboard');
     } catch (err) {
@@ -75,6 +73,7 @@ export default function Register() {
           });
         }
       }
+    } finally {
       setLoading(false);
     }
   }

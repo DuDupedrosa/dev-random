@@ -1,9 +1,10 @@
 import { httpStatusEnum } from '@/shared/enums/httpStatusEnum';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { User } from '@/types/user';
 import { verifyToken } from '../helpers/jwt';
 import { updateUserSchema } from './schemas/updateUserSchema';
+import { UserType } from '@/types/userType';
+import { verifyUserRecentlyDeleteAccount } from '../helpers/userDeleteAccountHelper';
 
 const userNotFoundMessage = 'User not found';
 const unauthorized = 'Unauthorized';
@@ -33,7 +34,10 @@ export async function GET(request: NextRequest) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, normalizedEmail, ...user } = findUser;
 
-    const response: User = user;
+    const response: UserType = {
+      recentlyDeleteAccount: await verifyUserRecentlyDeleteAccount(findUser.id),
+      ...user,
+    };
 
     return NextResponse.json(
       { content: response },
@@ -93,7 +97,7 @@ export async function PATCH(request: NextRequest) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, normalizedEmail, ...user } = updatedUser;
 
-    const response: User = user;
+    const response: UserType = user;
 
     return NextResponse.json(
       { content: response },
@@ -129,9 +133,30 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    await prisma.user.delete({ where: { id: findUser.id } });
+    await prisma.user.update({
+      where: { id: findUser.id },
+      data: {
+        deletedProfile: true,
+      },
+    });
+    await prisma.requestDeleteProfileLogs.create({
+      data: {
+        userId: findUser.id,
+      },
+    });
+    await prisma.apiKey.deleteMany({ where: { userId: findUser.id } });
 
-    return NextResponse.json({ content: null }, { status: httpStatusEnum.OK });
+    const response = NextResponse.json(
+      { content: null },
+      { status: httpStatusEnum.OK }
+    );
+
+    response.headers.set(
+      'Set-Cookie',
+      'token=; HttpOnly; Path=/; Max-Age=0; SameSite=Strict; Secure'
+    );
+
+    return response;
   } catch (err) {
     return NextResponse.json(
       { message: `InternalServerError|DeleteUser|Error: ${err}` },

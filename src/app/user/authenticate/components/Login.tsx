@@ -47,15 +47,12 @@ export default function Login() {
     },
   });
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
     setAlert(null);
 
     try {
-      const { data } = await http.post('/api/user/login', values);
-      const { content: user } = data;
-      setUser(user);
+      await http.post('/api/user/login', values);
       router.push('/dashboard');
     } catch (err) {
       if (err instanceof AxiosError) {

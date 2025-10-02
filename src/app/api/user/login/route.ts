@@ -4,7 +4,9 @@ import loginUserSchema from '../schemas/loginUserSchema';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcrypt';
 import { generateToken } from '../../helpers/jwt';
-import { serialize } from 'cookie'; // npm i cookie
+import { serialize } from 'cookie';
+import { UserType } from '@/types/userType';
+import { verifyUserRecentlyDeleteAccount } from '../../helpers/userDeleteAccountHelper';
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,7 +29,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    if (!findUser) {
+    if (!findUser || (findUser && findUser.deletedProfile)) {
       return NextResponse.json(
         { message: 'User not found' },
         { status: httpStatusEnum.NOT_FOUND }
@@ -59,8 +61,13 @@ export async function POST(request: NextRequest) {
       maxAge: 30 * 60, // 30 minutos
     });
 
+    const userResponse: UserType = {
+      recentlyDeleteAccount: await verifyUserRecentlyDeleteAccount(findUser.id),
+      ...user,
+    };
+
     const response = NextResponse.json(
-      { content: user },
+      { content: userResponse },
       { status: httpStatusEnum.OK }
     );
     response.headers.set('Set-Cookie', serializedCookie);
