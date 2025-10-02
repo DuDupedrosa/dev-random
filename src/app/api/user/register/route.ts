@@ -2,10 +2,11 @@ import { prisma } from '@/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
 import { httpStatusEnum } from '@/shared/enums/httpStatusEnum';
-import { User } from '@/types/user';
 import { generateToken } from '../../helpers/jwt';
 import registerUserSchema from '../schemas/regisetrUserSchema';
 import { serialize } from 'cookie';
+import { UserType } from '@/types/userType';
+import { verifyUserRecentlyDeleteAccount } from '../../helpers/userDeleteAccountHelper';
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,7 +29,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    if (existingUser) {
+    if (existingUser && !existingUser.deletedProfile) {
       return NextResponse.json(
         { message: 'User with this email already exists' },
         { status: httpStatusEnum.BAD_REQUEST }
@@ -45,15 +46,37 @@ export async function POST(request: NextRequest) {
       password: hashedPassword,
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { normalizedEmail, password, ...user } = await prisma.user.create({
-      data: {
-        normalizedEmail: validationDtoResult.data.email.toUpperCase(),
-        ...newUser,
-      },
-    });
+    let userResponse: UserType | null = null;
 
-    const token = generateToken(user.id, user.email);
+    if (existingUser) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { normalizedEmail, password, ...user } = await prisma.user.update({
+        where: { id: existingUser.id },
+        data: {
+          normalizedEmail: validationDtoResult.data.email.toUpperCase(),
+          deletedProfile: false,
+          ...newUser,
+        },
+      });
+      userResponse = {
+        recentlyDeleteAccount: await verifyUserRecentlyDeleteAccount(
+          existingUser.id
+        ),
+        ...user,
+      };
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { normalizedEmail, password, ...user } = await prisma.user.create({
+        data: {
+          normalizedEmail: validationDtoResult.data.email.toUpperCase(),
+          ...newUser,
+        },
+      });
+
+      userResponse = user;
+    }
+
+    const token = generateToken(userResponse.id, userResponse.email);
 
     if (!token) {
       return NextResponse.json(
@@ -73,7 +96,7 @@ export async function POST(request: NextRequest) {
     });
 
     const response = NextResponse.json(
-      { content: user },
+      { content: userResponse },
       { status: httpStatusEnum.CREATED }
     );
     response.headers.set('Set-Cookie', serializedCookie);

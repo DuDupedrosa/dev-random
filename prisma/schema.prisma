@@ -17,6 +17,39 @@ model User {
   password        String
   name            String   
   lastName        String?
+  planType        Int        @default(1)
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
+  deletedProfile  Boolean    @default(false) 
+  
+  ApiKey                   ApiKey[]
+  Usage                    Usage[]
+  RequestDeleteProfileLogs RequestDeleteProfileLogs[]
+}
+ 
+model ApiKey {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Usage {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  count     Int      @default(0) 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RequestDeleteProfileLogs {
+  id          Int      @id @default(autoincrement())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  explanation String?
+  createdAt   DateTime @default(now())
 }

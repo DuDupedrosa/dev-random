@@ -1,6 +1,5 @@
 'use client';
 
-import { User } from '@/types/user';
 import {
   createContext,
   useContext,
@@ -10,20 +9,23 @@ import {
 } from 'react';
 import { http } from '@/app/api/http';
 import { usePathname } from 'next/navigation';
+import { UserType } from '@/types/userType';
 
 type AuthContextType = {
-  user: User | null;
-  setUser: (user: User) => void;
+  user: UserType | null;
+  setUser: (user: UserType) => void;
   clearUser: () => void;
+  loading: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUserState] = useState<User | null>(null);
+  const [user, setUserState] = useState<UserType | null>(null);
   const pathname = usePathname();
-  const setUser = (newUser: User) => setUserState(newUser);
+  const setUser = (newUser: UserType) => setUserState(newUser);
   const clearUser = () => setUserState(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -32,16 +34,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(data.content);
       } catch {
         clearUser();
+      } finally {
+        setLoading(false);
       }
     };
 
-    if (!pathname.includes('authenticate') && !user) {
+    const routerToSkipFetchUser = ['/user/authenticate', '/', '/api-docs'];
+
+    if (!routerToSkipFetchUser.includes(pathname) && !user) {
       fetchUser();
+    } else {
+      setLoading(false);
     }
-  }, [pathname, user]);
+  }, [pathname]);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, clearUser }}>
+    <AuthContext.Provider value={{ user, setUser, clearUser, loading }}>
       {children}
     </AuthContext.Provider>
   );
