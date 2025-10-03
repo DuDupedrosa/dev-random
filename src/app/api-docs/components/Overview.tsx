@@ -1,6 +1,6 @@
-import IntroSectionTitle from "./IntroSectionTitle";
-import Image from "next/image";
-import ImageRocket from "@/assets/images/rocket.png";
+import IntroSectionTitle from './IntroSectionTitle';
+import Image from 'next/image';
+import ImageRocket from '@/assets/images/rocket.png';
 
 export default function Overview() {
   return (
@@ -29,8 +29,8 @@ export default function Overview() {
             <li>Cadastre-se gratuitamente no site.</li>
             <li>Crie sua chave de API no painel do usuário.</li>
             <li>
-              Envie a chave no header da sua requisição (ex:{" "}
-              <code>X-API-Key</code>).
+              Envie a chave no header da sua requisição (ex:{' '}
+              <code>x-api-key</code>).
             </li>
             <li>Chame o endpoint correspondente ao dado que deseja gerar.</li>
           </ul>

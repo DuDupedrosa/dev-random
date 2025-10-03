@@ -1,28 +1,29 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
   CardContent,
-} from "@/components/ui/card";
-import { useState } from "react";
+} from '@/components/ui/card';
+import { useState } from 'react';
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { FaHouse } from "react-icons/fa6";
-import Overview from "./Overview";
+} from '@/components/ui/breadcrumb';
+import { FaHouse } from 'react-icons/fa6';
+import Overview from './Overview';
+import Auth from './Auth';
 
 const buttonActiveStyle =
-  "bg-violet-200 hover:bg-violet-200 cursor-pointer text-violet-500 text-sm font-medium w-full md:w-42 text-start items-start justify-start";
+  'bg-violet-200 hover:bg-violet-200 cursor-pointer text-violet-500 text-sm font-medium w-full md:w-42 text-start items-start justify-start';
 const buttonToActiveStyle =
-  "block bg-transparent transition-all duration-300 hover:bg-violet-100 cursor-pointer shadow-none text-gray-600 text-sm w-full md:w-42 justify-start items-start text-start";
+  'block bg-transparent transition-all duration-300 hover:bg-violet-100 cursor-pointer shadow-none text-gray-600 text-sm w-full md:w-42 justify-start items-start text-start';
 
 const docStepsEnum = {
   OVERVIEW: 1,
@@ -32,15 +33,15 @@ const docStepsEnum = {
 
 const docStepsList = [
   {
-    label: "Visão geral",
+    label: 'Visão geral',
     value: docStepsEnum.OVERVIEW,
   },
   {
-    label: "Autenticação",
+    label: 'Autenticação',
     value: docStepsEnum.AUTH,
   },
   {
-    label: "Gerar documento",
+    label: 'Gerar documento',
     value: docStepsEnum.GENERATE_DOCUMENT,
   },
 ];
@@ -49,7 +50,7 @@ export default function ApiDocument() {
   const [docStep, setDocStep] = useState<number>(docStepsEnum.OVERVIEW);
 
   return (
-    <Card className="w-full max-w-[90%] md:max-w-[75%] shadow-lg rounded-3xl transition-shadow hover:shadow-xl">
+    <Card className="w-full max-w-[90%] lg:max-w-[75%] shadow-lg rounded-3xl transition-shadow hover:shadow-xl">
       <div className="px-8 mb-5">
         <Breadcrumb>
           <BreadcrumbList>
@@ -97,7 +98,10 @@ export default function ApiDocument() {
             </ul>
           </div>
 
-          <div>{docStep === docStepsEnum.OVERVIEW && <Overview />}</div>
+          <div>
+            {docStep === docStepsEnum.OVERVIEW && <Overview />}
+            {docStep === docStepsEnum.AUTH && <Auth />}
+          </div>
         </div>
       </CardContent>
     </Card>
