@@ -90,6 +90,7 @@ const examplesMeta: Record<
 export default function AuthExampleApiKey() {
   const [selected, setSelected] = useState<keyof typeof codeExamples>('curl');
   const isMobile = useMedia('(max-width: 768px)');
+  const isMobileSmall = useMedia('(max-width: 480px)');
 
   return (
     <div className="mt-5 space-y-4">
@@ -120,7 +121,41 @@ export default function AuthExampleApiKey() {
         ))}
       </div>
 
-      {isMobile ? (
+      {!isMobileSmall && (
+        <>
+          {isMobile ? (
+            <SyntaxHighlighter
+              language={examplesMeta[selected].lang}
+              style={oneDark}
+              customStyle={{
+                borderRadius: '0.75rem',
+                fontSize: '0.875rem',
+                padding: '1rem',
+                maxWidth: '320px',
+                overflowX: 'auto',
+                paddingBottom: '20px',
+              }}
+            >
+              {codeExamples[selected]}
+            </SyntaxHighlighter>
+          ) : (
+            <SyntaxHighlighter
+              language={examplesMeta[selected].lang}
+              style={oneDark}
+              customStyle={{
+                borderRadius: '0.75rem',
+                fontSize: '0.875rem',
+                padding: '1rem',
+                paddingBottom: '20px',
+              }}
+            >
+              {codeExamples[selected]}
+            </SyntaxHighlighter>
+          )}
+        </>
+      )}
+
+      {isMobileSmall && (
         <SyntaxHighlighter
           language={examplesMeta[selected].lang}
           style={oneDark}
@@ -128,22 +163,8 @@ export default function AuthExampleApiKey() {
             borderRadius: '0.75rem',
             fontSize: '0.875rem',
             padding: '1rem',
-            maxWidth: '320px',
-            overflowX: 'auto',
             paddingBottom: '20px',
-          }}
-        >
-          {codeExamples[selected]}
-        </SyntaxHighlighter>
-      ) : (
-        <SyntaxHighlighter
-          language={examplesMeta[selected].lang}
-          style={oneDark}
-          customStyle={{
-            borderRadius: '0.75rem',
-            fontSize: '0.875rem',
-            padding: '1rem',
-            paddingBottom: '20px',
+            width: '260px',
           }}
         >
           {codeExamples[selected]}
