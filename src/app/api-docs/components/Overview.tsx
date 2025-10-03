@@ -1,6 +1,7 @@
 import IntroSectionTitle from './IntroSectionTitle';
 import Image from 'next/image';
 import ImageRocket from '@/assets/images/rocket.png';
+import AlertInfoSite from '@/components/native/AlertInfoSite';
 
 export default function Overview() {
   return (
@@ -16,7 +17,7 @@ export default function Overview() {
         />
       </div>
 
-      <div className="mt-12">
+      <div className="mt-12 pb-5 border-b border-b-gray-300">
         <h1 className="text-gray-900 text-2xl font-medium">
           Visão geral da API
         </h1>
@@ -45,6 +46,8 @@ export default function Overview() {
           </p>
         </div>
       </div>
+
+      <AlertInfoSite />
     </div>
   );
 }

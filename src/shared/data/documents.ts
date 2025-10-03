@@ -1,56 +1,69 @@
-import { documentsEnum } from "../enums/documentsEnum";
+import { documentsEnum } from '../enums/documentsEnum';
 
 export const documentsOptionsList = [
   {
-    label: "CPF",
+    label: 'CPF',
     value: documentsEnum.CPF,
+    canBeGenerateWithMask: true,
   },
   {
-    label: "CNH",
+    label: 'CNH',
     value: documentsEnum.CNH,
+    canBeGenerateWithMask: false,
   },
   {
-    label: "RG",
+    label: 'RG',
     value: documentsEnum.RG,
+    canBeGenerateWithMask: true,
   },
   {
-    label: "CNS",
+    label: 'CNS',
     value: documentsEnum.CNS,
+    canBeGenerateWithMask: true,
   },
   {
-    label: "PIS",
+    label: 'PIS',
     value: documentsEnum.PIS,
+    canBeGenerateWithMask: true,
   },
   {
-    label: "Título de Eleitor",
+    label: 'Título de Eleitor',
     value: documentsEnum.TITULO_ELEITOR,
+    canBeGenerateWithMask: true,
   },
   {
-    label: "Passaporte",
+    label: 'Passaporte',
     value: documentsEnum.PASSAPORTE,
+    canBeGenerateWithMask: false,
   },
   {
-    label: "Certidão de nascimento",
+    label: 'Certidão de nascimento',
     value: documentsEnum.CERTIDAO_NASCIMENTO,
+    canBeGenerateWithMask: true,
   },
   {
-    label: "Certidão de casamento",
+    label: 'Certidão de casamento',
     value: documentsEnum.CERTIDAO_CASAMENTO,
+    canBeGenerateWithMask: true,
   },
   {
-    label: "Certidão de óbito",
+    label: 'Certidão de óbito',
     value: documentsEnum.CERTIDAO_OBITO,
+    canBeGenerateWithMask: true,
   },
   {
-    label: "CNPJ",
+    label: 'CNPJ',
     value: documentsEnum.CNPJ,
+    canBeGenerateWithMask: true,
   },
   {
-    label: "CNPJ Alfanumérico",
+    label: 'CNPJ Alfanumérico',
     value: documentsEnum.CNPJ_ALFANUMERICO,
+    canBeGenerateWithMask: true,
   },
   {
-    label: "Inscrição Estadual",
+    label: 'Inscrição Estadual',
     value: documentsEnum.INSCRICAO_ESTADUAL,
+    canBeGenerateWithMask: false,
   },
 ];

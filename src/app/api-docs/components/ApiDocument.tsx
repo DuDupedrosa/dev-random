@@ -19,11 +19,12 @@ import {
 import { FaHouse } from 'react-icons/fa6';
 import Overview from './Overview';
 import Auth from './Auth';
+import GeneratorDocument from './GeneratorDocument';
 
 const buttonActiveStyle =
-  'bg-violet-200 hover:bg-violet-200 cursor-pointer text-violet-500 text-sm font-medium w-full md:w-42 text-start items-start justify-start';
+  'bg-violet-200 hover:bg-violet-200 cursor-pointer text-violet-500 text-sm font-medium w-full lg:w-42 text-start items-start justify-start';
 const buttonToActiveStyle =
-  'block bg-transparent transition-all duration-300 hover:bg-violet-100 cursor-pointer shadow-none text-gray-600 text-sm w-full md:w-42 justify-start items-start text-start';
+  'block bg-transparent transition-all duration-300 hover:bg-violet-100 cursor-pointer shadow-none text-gray-600 text-sm w-full lg:w-42 justify-start items-start text-start';
 
 const docStepsEnum = {
   OVERVIEW: 1,
@@ -76,8 +77,8 @@ export default function ApiDocument() {
       </CardHeader>
 
       <CardContent>
-        <div className="grid md:grid-cols-[auto_1fr] gap-5">
-          <div className="pr-5 border-b border-b-gray-400 pb-5 md:border-r md:border-b-transparent md:pb-0  md:border-r-gray-400 md:max-w-max">
+        <div className="grid lg:grid-cols-[auto_1fr] gap-5">
+          <div className="pr-5 border-b border-b-gray-400 pb-5 lg:border-r lg:border-b-transparent lg:pb-0  lg:border-r-gray-400 lg:max-w-max">
             <ul className="flex flex-col gap-1">
               {docStepsList.map((step, i) => {
                 return (
@@ -101,6 +102,9 @@ export default function ApiDocument() {
           <div>
             {docStep === docStepsEnum.OVERVIEW && <Overview />}
             {docStep === docStepsEnum.AUTH && <Auth />}
+            {docStep === docStepsEnum.GENERATE_DOCUMENT && (
+              <GeneratorDocument />
+            )}
           </div>
         </div>
       </CardContent>

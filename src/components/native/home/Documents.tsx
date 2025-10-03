@@ -27,6 +27,7 @@ import { documentsOptionsList } from '@/shared/data/documents';
 import ImageRocket from '@/assets/images/rocket.png';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import AlertInfoSite from '../AlertInfoSite';
 
 function RandomValueValueAndCopyButton({
   value,
@@ -205,22 +206,9 @@ export default function DocumentsComponent() {
             </div>
           </div>
         </div>
-        <div className="pt-5">
-          <Alert>
-            <AlertTitle className="hidden"></AlertTitle>
-            <AlertDescription>
-              <p>
-                Este site foi criado para fins de testes e desenvolvimento. Os
-                dados gerados são válidos em formato,{' '}
-                <span className="font-bold">
-                  não representam informações reais
-                </span>
-                . O uso e a responsabilidade sobre como esses dados são
-                aplicados são exclusivamente do usuário.
-              </p>
-            </AlertDescription>
-          </Alert>
-        </div>
+
+        <AlertInfoSite />
+
         <div className="mt-6 p-4 border rounded-lg bg-violet-50 text-center">
           <div className="grid grid-cols-[20px_1fr] mb-3">
             <FaLightbulb className="text-yellow-500 w-5" />
