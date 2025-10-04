@@ -40,7 +40,10 @@ export default function AlertActionDialog({
 
   return (
     <Dialog open={isOpen}>
-      <DialogContent showCloseButton={false}>
+      <DialogContent
+        className="max-h-[90vh] overflow-auto"
+        showCloseButton={false}
+      >
         <DialogHeader>
           <DialogTitle className="font-medium text-center text-xl text-gray-900 flex flex-col items-center gap-3">
             <FiAlertTriangle className="w-8 h-8 text-red-600" />
