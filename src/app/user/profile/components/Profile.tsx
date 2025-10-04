@@ -23,19 +23,12 @@ import { Input } from '@/components/ui/input';
 import { InfoIcon, Loader2Icon } from 'lucide-react';
 import ChangePasswordDialog from './ChangePasswordDialog';
 import { useEffect, useState } from 'react';
-import AlertActionDialog from '@/components/native/AlertActionDialog';
 import { useAuth } from '@/app/providers/AuthContext';
 import { http } from '@/app/api/http';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
 import PageLoading from '@/components/native/PageLoading';
 import { motion } from 'framer-motion';
-
-const deleteAccountText = {
-  title: 'Excluir conta',
-  description:
-    'Esta operação é irreversível e resultará na perda definitiva de todos os seus dados. Tem certeza de que deseja prosseguir?',
-};
+import DeleteAccountDialog from './DeleteAccountDialog';
 
 const formSchema = z.object({
   name: z.string().min(1, 'O nome é obrigatório'),
@@ -46,12 +39,9 @@ export default function Profile() {
   const [openDialogChangePassword, setOpenDialogChangePassword] =
     useState(false);
   const [openDialogDeleteAccount, setOpenDialogDeleteAccount] = useState(false);
-  const { user, loading, setUser, clearUser } = useAuth();
+  const { user, loading, setUser } = useAuth();
   const [updateProfileLoading, setUpdateProfileLoading] =
     useState<boolean>(false);
-  const [deleteAccountLoading, setDeleteAccountLoading] =
-    useState<boolean>(false);
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -71,20 +61,6 @@ export default function Profile() {
       void err;
     } finally {
       setUpdateProfileLoading(false);
-    }
-  }
-
-  async function handleDeleteAccount() {
-    setDeleteAccountLoading(true);
-    try {
-      await http.delete('/api/user');
-      toast.success('Sua conta foi excluída com sucesso.');
-      setTimeout(() => {
-        window.location.href = '/user/authenticate';
-      }, 1000);
-    } catch (err) {
-      setDeleteAccountLoading(false);
-      void err;
     }
   }
 
@@ -199,18 +175,13 @@ export default function Profile() {
                   </Button>
                 </div>
               </div>
-
               <ChangePasswordDialog
                 onClose={() => setOpenDialogChangePassword(false)}
                 open={openDialogChangePassword}
               />
-              <AlertActionDialog
-                title={deleteAccountText.title}
-                description={deleteAccountText.description}
-                open={openDialogDeleteAccount}
+              <DeleteAccountDialog
                 onClose={() => setOpenDialogDeleteAccount(false)}
-                onConfirm={() => handleDeleteAccount()}
-                loading={deleteAccountLoading}
+                open={openDialogDeleteAccount}
               />
             </CardContent>
           </Card>

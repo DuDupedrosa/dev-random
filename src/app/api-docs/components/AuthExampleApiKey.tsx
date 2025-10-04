@@ -7,12 +7,14 @@ import { FaNodeJs } from 'react-icons/fa6';
 import { SiAxios, SiPython, SiDotnet, SiCurl } from 'react-icons/si';
 import useMedia from '@/components/native/UseMedia';
 
+const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL!}/api-key/is-valid`;
+
 const codeExamples = {
-  curl: `curl -X GET "https://dev-random.vercel.app/rota_example" \\
+  curl: `curl -X GET "${apiUrl}" \\
   -H "Content-Type: application/json" \\
   -H "x-api-key: SUA_CHAVE_AQUI"`,
 
-  node: `fetch("https://dev-random.vercel.app/rota_example", {
+  node: `fetch("${apiUrl}", {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
@@ -24,7 +26,7 @@ const codeExamples = {
 
   axios: `import axios from "axios";
 
-axios.get("https://dev-random.vercel.app/rota_example", {
+axios.get("${apiUrl}", {
   headers: {
     "Content-Type": "application/json",
     "x-api-key": "SUA_CHAVE_AQUI"
@@ -35,7 +37,7 @@ axios.get("https://dev-random.vercel.app/rota_example", {
 
   python: `import requests
 
-url = "https://dev-random.vercel.app/rota_example"
+url = "${apiUrl}"
 headers = {
     "Content-Type": "application/json",
     "x-api-key": "SUA_CHAVE_AQUI"
@@ -51,7 +53,7 @@ var client = new HttpClient();
 client.DefaultRequestHeaders.Add("x-api-key", "SUA_CHAVE_AQUI");
 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-var response = await client.GetAsync("https://dev-random.vercel.app/rota_example");
+var response = await client.GetAsync("${apiUrl}");
 var result = await response.Content.ReadAsStringAsync();
 Console.WriteLine(result);`,
 };
