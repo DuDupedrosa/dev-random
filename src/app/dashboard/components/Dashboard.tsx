@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import DashboardWithKey from './DashboardWithKey';
-import DashboardWithoutKey from './DashboardWithoutKey';
-import { http } from '@/app/api/http';
-import PageLoading from '@/components/native/PageLoading';
-import { motion } from 'framer-motion';
-import { ApiKeyType } from '@/types/apiKeyType';
-import { useAuth } from '@/app/providers/AuthContext';
+import { useEffect, useState } from "react";
+import DashboardWithKey from "./DashboardWithKey";
+import DashboardWithoutKey from "./DashboardWithoutKey";
+import { http } from "@/app/api/http";
+import PageLoading from "@/components/native/PageLoading";
+import { motion } from "framer-motion";
+import { ApiKeyType } from "@/types/apiKeyType";
+import { useAuth } from "@/app/providers/AuthContext";
 
 export function DashboardWithKeyAnimated({
   children,
@@ -18,7 +18,7 @@ export function DashboardWithKeyAnimated({
     <motion.div
       initial={{ opacity: 0, y: 20 }} // começa invisível e levemente para baixo
       animate={{ opacity: 1, y: 0 }} // aparece e sobe suavemente
-      transition={{ duration: 0.4, ease: 'easeOut' }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
     >
       {children}
     </motion.div>
@@ -34,7 +34,7 @@ export function DashboardWithoutKeyAnimated({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: 'easeOut' }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
     >
       {children}
     </motion.div>
@@ -46,18 +46,19 @@ export default function Dashboard() {
   const [loadingData, setLoadingData] = useState<boolean>(true);
   const { user, loading } = useAuth();
 
-  useEffect(() => {
-    const fetchApiKeyData = async () => {
-      try {
-        const { data } = await http.get('/api/api-key');
-        setApiKeyData(data.content);
-      } catch (err) {
-        void err;
-      } finally {
-        setLoadingData(false);
-      }
-    };
+  const fetchApiKeyData = async () => {
+    setLoadingData(true);
+    try {
+      const { data } = await http.get("/api/api-key");
+      setApiKeyData(data.content);
+    } catch (err) {
+      void err;
+    } finally {
+      setLoadingData(false);
+    }
+  };
 
+  useEffect(() => {
     if (!apiKeyData) {
       fetchApiKeyData();
     }
@@ -71,6 +72,7 @@ export default function Dashboard() {
           {apiKeyData ? (
             <DashboardWithKeyAnimated>
               <DashboardWithKey
+                onReload={() => fetchApiKeyData()}
                 //onDeleteSuccess={() => setApiKeyData(null)}
                 apiKeyData={apiKeyData}
               />

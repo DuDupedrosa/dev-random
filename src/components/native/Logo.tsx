@@ -1,13 +1,13 @@
-import Link from 'next/link';
-import { IoHome } from 'react-icons/io5';
+import Link from "next/link";
+import { IoHome } from "react-icons/io5";
 
 export default function LogoLink({ authenticate }: { authenticate?: boolean }) {
   return (
     <Link
-      href={authenticate ? '/dashboard' : '/'}
+      href={authenticate ? "/dashboard" : "/"}
       className="flex items-center gap-2 font-bold text-2xl text-white hover:scale-105 transition-transform"
     >
-      <IoHome className="w-8 h-8 text-white" />
+      <IoHome className="w-8 h-8 text-white mb-[10px]" />
       <span className="text-white drop-shadow-md">DevRandom</span>
     </Link>
   );

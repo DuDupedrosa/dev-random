@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import IntroSectionTitle from './IntroSectionTitle';
-import { FaCopy, FaNodeJs } from 'react-icons/fa6';
-import { documentsOptionsList } from '@/shared/data/documents';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { Button } from '@/components/ui/button';
-import { copyToClipboard } from '@/shared/helpers/copyToClipboardHelper';
-import { SiAxios, SiPython, SiDotnet, SiCurl } from 'react-icons/si';
-import { JSX, useState } from 'react';
-import useMedia from '@/components/native/UseMedia';
+import IntroSectionTitle from "./IntroSectionTitle";
+import { FaCopy, FaNodeJs } from "react-icons/fa6";
+import { documentsOptionsList } from "@/shared/data/documents";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { Button } from "@/components/ui/button";
+import { copyToClipboard } from "@/shared/helpers/copyToClipboardHelper";
+import { SiAxios, SiPython, SiDotnet, SiCurl } from "react-icons/si";
+import { JSX, useState } from "react";
+import useMedia from "@/components/native/UseMedia";
 
-const listStyle = 'flex items-start gap-3 break-all';
-const sectionTitle = 'text-gray-900 text-2xl font-medium';
+const listStyle = "flex items-start gap-3 break-all";
+const sectionTitle = "text-gray-900 text-2xl font-medium";
 
 const enumExamples = {
   json: JSON.stringify(documentsOptionsList, null, 2),
 };
 
 const apiUrl = `${process.env
-  .NEXT_PUBLIC_API_BASE_URL!}/generator/document/documentType={tipo_do_documento}`;
+  .NEXT_PUBLIC_API_BASE_URL!}/generator/documents?documentType={tipo_do_documento}`;
 
 const requestExamples = {
   curl: `curl -X GET "${apiUrl}" \\
@@ -76,37 +76,37 @@ const requestExamplesMeta: Record<
 > = {
   curl: {
     icon: <SiCurl className="text-gray-500 text-base" />,
-    lang: 'bash',
-    label: 'Curl',
+    lang: "bash",
+    label: "Curl",
   },
   node: {
     icon: <FaNodeJs className="text-green-600 text-base" />,
-    lang: 'javascript',
-    label: 'Node',
+    lang: "javascript",
+    label: "Node",
   },
   axios: {
     icon: <SiAxios className="text-sky-500 text-base" />,
-    lang: 'javascript',
-    label: 'Axios',
+    lang: "javascript",
+    label: "Axios",
   },
   python: {
     icon: <SiPython className="text-yellow-500 text-base" />,
-    lang: 'python',
-    label: 'Python',
+    lang: "python",
+    label: "Python",
   },
   csharp: {
     icon: <SiDotnet className="text-blue-600 text-base" />,
-    lang: 'csharp',
-    label: 'C#',
+    lang: "csharp",
+    label: "C#",
   },
 };
 
 export default function GeneratorDocument() {
-  const isMobile = useMedia('(max-width: 769px)');
-  const isMobileSmall = useMedia('(max-width: 480px)');
+  const isMobile = useMedia("(max-width: 769px)");
+  const isMobileSmall = useMedia("(max-width: 480px)");
 
   const [selected, setSelected] =
-    useState<keyof typeof requestExamples>('curl');
+    useState<keyof typeof requestExamples>("curl");
 
   return (
     <div>
@@ -137,7 +137,7 @@ export default function GeneratorDocument() {
               <span className="font-semibold">1.</span>
               <span>
                 Certifique-se de já ter sua chave de API. Se ainda não tiver,
-                acesse o passo anterior de{' '}
+                acesse o passo anterior de{" "}
                 <span className="font-bold">Autenticação</span> para gerar a
                 sua.
               </span>
@@ -148,21 +148,21 @@ export default function GeneratorDocument() {
             <p className={listStyle}>
               <span className="font-semibold">2.</span>
               <span>
-                Para gerar um documento, faça uma requisição{' '}
+                Para gerar um documento, faça uma requisição{" "}
                 <span className="font-bold">GET</span> para o endpoint:
                 <code className="bg-gray-100 px-1 py-0.5 rounded">
-                  /api/generator/documents/?documentType={'{tipo_documento}'}
+                  /api/generator/documents?documentType={"{tipo_documento}"}
                 </code>
-                . O documento gerado será retornado na propriedade{' '}
+                . O documento gerado será retornado na propriedade{" "}
                 <span className="font-bold">content</span> da resposta.
                 <br />
                 <br />
-                Opcionalmente, você pode incluir a query{' '}
+                Opcionalmente, você pode incluir a query{" "}
                 <code className="bg-gray-100 px-1 py-0.5 rounded">
                   &mask=false
-                </code>{' '}
+                </code>{" "}
                 para gerar o documento <strong>sem máscara</strong>. Por padrão,
-                o valor é <code>true</code>, então você{' '}
+                o valor é <code>true</code>, então você{" "}
                 <strong>não precisa enviar</strong> esse parâmetro se quiser que
                 a máscara seja aplicada.
                 <br />
@@ -193,8 +193,8 @@ export default function GeneratorDocument() {
                         transition-colors
                         ${
                           selected === key
-                            ? 'bg-gray-200 border-gray-400 text-gray-900'
-                            : 'bg-gray-50 border-gray-300 text-gray-700 hover:bg-gray-100'
+                            ? "bg-gray-200 border-gray-400 text-gray-900"
+                            : "bg-gray-50 border-gray-300 text-gray-700 hover:bg-gray-100"
                         }
                       `}
               >
@@ -210,12 +210,12 @@ export default function GeneratorDocument() {
                   language={requestExamplesMeta[selected].lang}
                   style={oneDark}
                   customStyle={{
-                    borderRadius: '0.75rem',
-                    fontSize: '0.875rem',
-                    padding: '1rem',
-                    width: '320px',
-                    overflowX: 'auto',
-                    paddingBottom: '20px',
+                    borderRadius: "0.75rem",
+                    fontSize: "0.875rem",
+                    padding: "1rem",
+                    width: "320px",
+                    overflowX: "auto",
+                    paddingBottom: "20px",
                   }}
                 >
                   {requestExamples[selected]}
@@ -225,11 +225,11 @@ export default function GeneratorDocument() {
                   language={requestExamplesMeta[selected].lang}
                   style={oneDark}
                   customStyle={{
-                    borderRadius: '0.75rem',
-                    fontSize: '0.875rem',
-                    padding: '1rem',
-                    paddingBottom: '20px',
-                    width: '520px',
+                    borderRadius: "0.75rem",
+                    fontSize: "0.875rem",
+                    padding: "1rem",
+                    paddingBottom: "20px",
+                    width: "520px",
                   }}
                 >
                   {requestExamples[selected]}
@@ -243,11 +243,11 @@ export default function GeneratorDocument() {
               language={requestExamplesMeta[selected].lang}
               style={oneDark}
               customStyle={{
-                borderRadius: '0.75rem',
-                fontSize: '0.875rem',
-                padding: '1rem',
-                paddingBottom: '20px',
-                width: '260px',
+                borderRadius: "0.75rem",
+                fontSize: "0.875rem",
+                padding: "1rem",
+                paddingBottom: "20px",
+                width: "260px",
               }}
             >
               {requestExamples[selected]}
@@ -276,12 +276,12 @@ export default function GeneratorDocument() {
                   language="json"
                   style={oneDark}
                   customStyle={{
-                    borderRadius: '0.75rem',
-                    fontSize: '0.875rem',
-                    padding: '1rem',
-                    paddingBottom: '20px',
-                    height: '300px',
-                    width: '320px',
+                    borderRadius: "0.75rem",
+                    fontSize: "0.875rem",
+                    padding: "1rem",
+                    paddingBottom: "20px",
+                    height: "300px",
+                    width: "320px",
                   }}
                 >
                   {enumExamples.json}
@@ -291,11 +291,11 @@ export default function GeneratorDocument() {
                   language="json"
                   style={oneDark}
                   customStyle={{
-                    borderRadius: '0.75rem',
-                    fontSize: '0.875rem',
-                    padding: '1rem',
-                    paddingBottom: '20px',
-                    height: '300px',
+                    borderRadius: "0.75rem",
+                    fontSize: "0.875rem",
+                    padding: "1rem",
+                    paddingBottom: "20px",
+                    height: "300px",
                   }}
                 >
                   {enumExamples.json}
@@ -309,12 +309,12 @@ export default function GeneratorDocument() {
               language="json"
               style={oneDark}
               customStyle={{
-                borderRadius: '0.75rem',
-                fontSize: '0.875rem',
-                padding: '1rem',
-                paddingBottom: '20px',
-                height: '300px',
-                width: '220px',
+                borderRadius: "0.75rem",
+                fontSize: "0.875rem",
+                padding: "1rem",
+                paddingBottom: "20px",
+                height: "300px",
+                width: "220px",
               }}
             >
               {enumExamples.json}
