@@ -22,7 +22,6 @@ import AlertError from '@/components/native/AlertError';
 import { Loader2Icon } from 'lucide-react';
 import { AxiosError } from 'axios';
 import { httpStatusEnum } from '@/shared/enums/httpStatusEnum';
-import { useAuth } from '@/app/providers/AuthContext';
 
 const formSchema = z.object({
   name: z.string().min(1, 'O nome é obrigatório'),
@@ -41,7 +40,6 @@ export default function Register() {
   const [alert, setAlert] = useState<{ show: boolean; message: string } | null>(
     null
   );
-  const { setUser } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

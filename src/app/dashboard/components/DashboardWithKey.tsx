@@ -24,7 +24,6 @@ import { useAuth } from '@/app/providers/AuthContext';
 import { formatDateWithTime } from '@/shared/helpers/dateHelper';
 import PageLoading from '@/components/native/PageLoading';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
 import { ApiKeyType } from '@/types/apiKeyType';
 import { UsageType } from '@/types/usageType';
 
@@ -54,7 +53,6 @@ export default function DashboardWithKey({
   const { user } = useAuth();
   const [regenerateApiKeyLoading, setRegenerateApiKeyLoading] =
     useState<boolean>(false);
-  const router = useRouter();
   // const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   // const [deleteApiKeyLoading, setDeleteApiKeyLoading] =
   //   useState<boolean>(false);

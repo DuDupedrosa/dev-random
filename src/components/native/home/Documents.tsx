@@ -18,7 +18,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { FaCopy, FaLightbulb } from 'react-icons/fa6';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useEffect, useState } from 'react';
 import { documentsEnum, DocumentsEnum } from '@/shared/enums/documentsEnum';
 import { copyToClipboard } from '@/shared/helpers/copyToClipboardHelper';

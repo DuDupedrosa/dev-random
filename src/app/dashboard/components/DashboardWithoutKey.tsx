@@ -1,5 +1,4 @@
 import { http } from '@/app/api/http';
-import { useAuth } from '@/app/providers/AuthContext';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,7 +12,6 @@ import { ApiKeyType } from '@/types/apiKeyType';
 import { UserType } from '@/types/userType';
 import { KeyIcon, Loader2Icon, RocketIcon } from 'lucide-react';
 import { useState } from 'react';
-import { FaCircleCheck } from 'react-icons/fa6';
 import { toast } from 'sonner';
 
 export default function DashboardWithoutKey({
