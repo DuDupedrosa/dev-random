@@ -18,12 +18,15 @@ const enumExamples = {
   json: JSON.stringify(documentsOptionsList, null, 2),
 };
 
+const apiUrl = `${process.env
+  .NEXT_PUBLIC_API_BASE_URL!}/generator/document/documentType={tipo_do_documento}`;
+
 const requestExamples = {
-  curl: `curl -X GET "https://dev-random.vercel.app/api/generator/document/documentType={tipo_do_documento}" \\
+  curl: `curl -X GET "${apiUrl}" \\
   -H "Content-Type: application/json" \\
   -H "x-api-key: SUA_CHAVE_AQUI"`,
 
-  node: `fetch("https://dev-random.vercel.app/api/generator/document/documentType={tipo_do_documento}", {
+  node: `fetch("${apiUrl}", {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
@@ -35,7 +38,7 @@ const requestExamples = {
 
   axios: `import axios from "axios";
 
-axios.get("https://dev-random.vercel.app/api/generator/document/documentType={tipo_do_documento}", {
+axios.get("${apiUrl}", {
   headers: {
     "Content-Type": "application/json",
     "x-api-key": "SUA_CHAVE_AQUI"
@@ -46,7 +49,7 @@ axios.get("https://dev-random.vercel.app/api/generator/document/documentType={ti
 
   python: `import requests
 
-url = "https://dev-random.vercel.app/api/generator/document/documentType={tipo_do_documento}"
+url = "${apiUrl}"
 headers = {
     "Content-Type": "application/json",
     "x-api-key": "SUA_CHAVE_AQUI"
@@ -62,7 +65,7 @@ var client = new HttpClient();
 client.DefaultRequestHeaders.Add("x-api-key", "SUA_CHAVE_AQUI");
 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-var response = await client.GetAsync("https://dev-random.vercel.app/api/generator/document/documentType={tipo_do_documento}");
+var response = await client.GetAsync("${apiUrl}");
 var result = await response.Content.ReadAsStringAsync();
 Console.WriteLine(result);`,
 };
@@ -123,8 +126,7 @@ export default function GeneratorDocument() {
               GET
             </span>
             <span className="block text-base text-gray-600 break-all font-medium">
-              https://dev-random.vercel.app/api/generator/document/documentType=
-              {'{tipo_do_documento}'}
+              {apiUrl}
             </span>
           </div>
         </div>

@@ -5,6 +5,7 @@ import { getCurrentMonthRange } from '../../helpers/getCurrentMonthRange';
 import { userExceededLimit } from '@/shared/helpers/usageHelper';
 import { DocumentsEnum, documentsEnum } from '@/shared/enums/documentsEnum';
 import { generateRandomDocument } from '@/shared/helpers/generateRandomDocumentHelper';
+import { apiKeyMessages } from '../../helpers/messages/apiKeyMessages';
 
 const validDocumentsTypes = Object.values(documentsEnum) as number[];
 
@@ -14,7 +15,7 @@ export async function GET(request: NextRequest) {
 
     if (!apiKey) {
       return NextResponse.json(
-        { message: 'Missing x-api-key header' },
+        { message: apiKeyMessages.MISSING_HEADER },
         { status: httpStatusEnum.BAD_REQUEST }
       );
     }
@@ -26,14 +27,14 @@ export async function GET(request: NextRequest) {
 
     if (!findApiKey) {
       return NextResponse.json(
-        { message: 'Invalid API Key' },
+        { message: apiKeyMessages.INVALID_KEY },
         { status: httpStatusEnum.BAD_REQUEST }
       );
     }
 
     if (!findApiKey.active) {
       return NextResponse.json(
-        { message: 'This API Key is inactive' },
+        { message: apiKeyMessages.INACTIVE_KEY },
         { status: httpStatusEnum.BAD_REQUEST }
       );
     }
@@ -94,7 +95,7 @@ export async function GET(request: NextRequest) {
       if (userExceededLimit(findApiKey.user.planType, newCount)) {
         return NextResponse.json(
           {
-            message: 'Your plan account Exceeded month limit requests',
+            message: apiKeyMessages.MAX_LIMIT_PLAN,
           },
           { status: httpStatusEnum.BAD_REQUEST }
         );

@@ -79,7 +79,7 @@ export default function ChangePasswordDialog({
       await http.post('/api/user/logout');
       setShowSuccessAlert(true);
       setTimeout(() => {
-        router.push('/user/authenticate?cleanUser=true');
+        router.push('/user/authenticate');
       }, 3000);
     } catch (err) {
       if (err instanceof AxiosError) {

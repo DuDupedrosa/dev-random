@@ -4,10 +4,10 @@ import { Button } from '../ui/button';
 import Image from 'next/image';
 import RocketImage from '@/assets/images/rocket.png';
 import { usePathname, useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { userHasValidToken } from '@/shared/helpers/userHelper';
 import { useState } from 'react';
 import { Loader2Icon } from 'lucide-react';
+import LogoLink from './Logo';
 
 export default function OutsideHeader({
   onlineGenerator = false,
@@ -37,13 +37,11 @@ export default function OutsideHeader({
   return (
     <div className="h-28 md:h-24 bg-violet-400 shadow-md w-full">
       <div className="flex flex-col md:flex-row justify-center md:justify-between md:max-w-3/4 mx-auto gap-5 items-center h-full px-8">
-        <Link href={'/'} className="font-semibold text-2xl text-white">
-          DevRandom
-        </Link>
+        <LogoLink />
 
         <div className="flex items-center gap-4">
-          {!pathname.includes('authenticate') && (
-            <>
+          <>
+            {!pathname.includes('authenticate') && (
               <Button
                 onClick={handleRedirectToLogin}
                 className={`bg-gradient-to-r from-violet-500 to-indigo-500 text-white 
@@ -56,23 +54,22 @@ export default function OutsideHeader({
                 )}
                 Entrar
               </Button>
-
-              <Button
-                onClick={handleChangePage}
-                className="bg-gradient-to-r cursor-pointer from-fuchsia-500 via-violet-500 to-indigo-500
+            )}
+            <Button
+              onClick={handleChangePage}
+              className="bg-gradient-to-r cursor-pointer from-fuchsia-500 via-violet-500 to-indigo-500
                    text-white font-bold text-base sm:text-lg px-6 py-3 rounded-2xl
                    hover:scale-110 hover:shadow-xl hover:shadow-violet-400
                    transition-all duration-300 ease-out"
-              >
-                <Image
-                  className="max-w-[20px] sm:max-w-[24px]"
-                  alt="Rocket-Icon"
-                  src={RocketImage}
-                />{' '}
-                {onlineGenerator ? 'Gerador online' : 'Utilizar API'}
-              </Button>
-            </>
-          )}
+            >
+              <Image
+                className="max-w-[20px] sm:max-w-[24px]"
+                alt="Rocket-Icon"
+                src={RocketImage}
+              />{' '}
+              {onlineGenerator ? 'Gerador online' : 'Utilizar API'}
+            </Button>
+          </>
         </div>
       </div>
     </div>
