@@ -39,9 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    const routerToSkipFetchUser = ['/user/authenticate', '/', '/api-docs'];
-
-    if (!routerToSkipFetchUser.includes(pathname) && !user) {
+    if (!user) {
       fetchUser();
     } else {
       setLoading(false);

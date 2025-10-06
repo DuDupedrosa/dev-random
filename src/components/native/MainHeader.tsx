@@ -19,6 +19,7 @@ import {
 } from 'react-icons/io5';
 import { useAuth } from '@/app/providers/AuthContext';
 import { http } from '@/app/api/http';
+import LogoLink from './Logo';
 
 const dropDownMenuItemStyle =
   'flex gap-2 items-center cursor-pointer data-[highlighted]:bg-violet-100 rounded-lg px-3 py-2';
@@ -39,9 +40,7 @@ export default function MainHeader() {
   return (
     <div className="h-28 md:h-24 bg-violet-400 shadow-md w-full">
       <div className="flex flex-col md:flex-row justify-center md:justify-between md:max-w-3/4 mx-auto gap-5 items-center h-full px-8">
-        <Link href={'/dashboard'} className="font-semibold text-2xl text-white">
-          DevRandom
-        </Link>
+        <LogoLink authenticate={true} />
 
         <div className="flex items-center gap-4">
           <DropdownMenu>

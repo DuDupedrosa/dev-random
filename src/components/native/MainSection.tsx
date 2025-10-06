@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 type MainSectionProps = {
   children: ReactNode;
@@ -6,7 +6,13 @@ type MainSectionProps = {
 
 export default function MainSection({ children }: MainSectionProps) {
   return (
-    <section className="min-h-screen bg-gradient-to-b from-violet-50 to-white">
+    <section
+      className="
+        min-h-screen
+        flex flex-col
+        bg-gradient-to-b from-violet-50 to-white
+      "
+    >
       {children}
     </section>
   );
