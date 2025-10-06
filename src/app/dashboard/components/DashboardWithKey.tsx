@@ -1,36 +1,37 @@
-'use client';
+"use client";
 
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import {
   KeyIcon,
   CopyIcon,
   RefreshCwIcon,
   //TrashIcon,
   InfoIcon,
-} from 'lucide-react';
-import { copyToClipboard } from '@/shared/helpers/copyToClipboardHelper';
-import { useEffect, useState } from 'react';
-import AlertActionDialog from '@/components/native/AlertActionDialog';
-import { FiBookOpen } from 'react-icons/fi';
-import { http } from '@/app/api/http';
+} from "lucide-react";
+import { copyToClipboard } from "@/shared/helpers/copyToClipboardHelper";
+import { useEffect, useState } from "react";
+import AlertActionDialog from "@/components/native/AlertActionDialog";
+import { FiBookOpen } from "react-icons/fi";
+import { http } from "@/app/api/http";
 import {
   getFreeRequestsCount,
   getPercentageUsage,
   getTotalRequestsCount,
-} from '@/shared/helpers/usageHelper';
-import { useAuth } from '@/app/providers/AuthContext';
-import { formatDateWithTime } from '@/shared/helpers/dateHelper';
-import PageLoading from '@/components/native/PageLoading';
-import { toast } from 'sonner';
-import { ApiKeyType } from '@/types/apiKeyType';
-import { UsageType } from '@/types/usageType';
+} from "@/shared/helpers/usageHelper";
+import { useAuth } from "@/app/providers/AuthContext";
+import { formatDateWithTime } from "@/shared/helpers/dateHelper";
+import PageLoading from "@/components/native/PageLoading";
+import { toast } from "sonner";
+import { ApiKeyType } from "@/types/apiKeyType";
+import { UsageType } from "@/types/usageType";
+import { IoReload } from "react-icons/io5";
 
 const regenerateKeyDialogText = {
-  title: 'Deseja realmente gerar uma nova chave de API?',
+  title: "Deseja realmente gerar uma nova chave de API?",
   description:
-    'A chave atual será excluída e deixará de funcionar. Uma nova chave será criada automaticamente e você deverá usá-la em seus projetos.',
+    "A chave atual será excluída e deixará de funcionar. Uma nova chave será criada automaticamente e você deverá usá-la em seus projetos.",
 };
 
 // const deleteKeyDialogText = {
@@ -41,10 +42,12 @@ const regenerateKeyDialogText = {
 
 export default function DashboardWithKey({
   apiKeyData,
+  onReload,
 }: //onDeleteSuccess,
 {
   apiKeyData: ApiKeyType;
   //onDeleteSuccess: () => void;
+  onReload: () => void;
 }) {
   const [isRegenerateAlertOpen, setIsRegenerateAlertOpen] = useState(false);
   const [apiKey, setApiKey] = useState<ApiKeyType | null>(null);
@@ -60,7 +63,7 @@ export default function DashboardWithKey({
   async function handleRegenerateApiKey() {
     setRegenerateApiKeyLoading(true);
     try {
-      const { data } = await http.patch('/api/api-key', {
+      const { data } = await http.patch("/api/api-key", {
         apiKeyId: apiKey?.id,
       });
       if (apiKey) {
@@ -70,7 +73,7 @@ export default function DashboardWithKey({
         };
         setApiKey(newApiKey);
         setIsRegenerateAlertOpen(false);
-        toast.success('Nova chave de API gerada com sucesso!');
+        toast.success("Nova chave de API gerada com sucesso!");
       }
     } catch (err) {
       void err;
@@ -96,7 +99,7 @@ export default function DashboardWithKey({
   useEffect(() => {
     const fetchUsage = async () => {
       try {
-        const { data } = await http.get('/api/api-key/usage');
+        const { data } = await http.get("/api/api-key/usage");
         if (data.content) {
           setUsageData(data.content);
         }
@@ -118,7 +121,7 @@ export default function DashboardWithKey({
       {usageLoading && <PageLoading />}
       {apiKey && !usageLoading && user && (
         <Card className="w-full mx-auto mt-12 max-w-3xl shadow-lg rounded-3xl transition-shadow hover:shadow-xl">
-          <CardHeader className="flex flex-col items-center text-center">
+          <CardHeader className="flex flex-col items-center text-center relative">
             <div className="bg-purple-100 p-3 rounded-full mb-3">
               <KeyIcon className="h-8 w-8 text-purple-600" />
             </div>
@@ -127,6 +130,10 @@ export default function DashboardWithKey({
                 Sua chave de API
               </span>
             </CardTitle>
+
+            <Button onClick={onReload} className="absolute top-0 right-5">
+              <IoReload className="w-5 h-5" />
+            </Button>
           </CardHeader>
 
           <CardContent className="space-y-6">
@@ -155,7 +162,7 @@ export default function DashboardWithKey({
                 <p className="font-medium">
                   {usageData
                     ? formatDateWithTime(usageData.updatedAt)
-                    : 'Nenhuma chamada registrada'}
+                    : "Nenhuma chamada registrada"}
                 </p>
               </div>
               <div className="p-3 rounded-lg bg-purple-50 text-left">
@@ -180,7 +187,7 @@ export default function DashboardWithKey({
                 <span>
                   {usageData
                     ? getPercentageUsage(user.planType, usageData.count)
-                    : '0'}
+                    : "0"}
                   % usado
                 </span>
               </div>
@@ -211,7 +218,7 @@ export default function DashboardWithKey({
                 <RefreshCwIcon className="h-4 w-4" /> Regenerar chave de API
               </Button>
               <Button
-                onClick={() => window.open('/api-docs', '_blank')}
+                onClick={() => window.open("/api-docs", "_blank")}
                 variant="outline"
                 className="flex items-center gap-2"
               >

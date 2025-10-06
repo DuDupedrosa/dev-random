@@ -1,36 +1,138 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧪 DevRandom
 
-## Getting Started
+**DevRandom** é uma plataforma para gerar **dados aleatórios para desenvolvedores**, de forma simples, rápida e gratuita.
+O projeto conta com:
 
-First, run the development server:
+- ✅ Um **gerador online gratuito** diretamente no navegador.
+- 🛠️ Uma **API pronta para uso**, permitindo integração com suas aplicações.
+
+Atualmente, cada usuário possui **limite de 100 chamadas mensais** na API — mas o objetivo é expandir essa capacidade no futuro.
+
+---
+
+## 🚀 Stack Tecnológica
+
+O **DevRandom** é desenvolvido utilizando tecnologias modernas para garantir **performance, segurança e escalabilidade**:
+
+- ⚛️ [Next.js 15 (App Router)](https://nextjs.org/) – Frontend e backend no mesmo projeto
+- 🎨 [shadcn/ui](https://ui.shadcn.com/) + [Tailwind CSS](https://tailwindcss.com/) – Componentização e estilização
+- 📡 [Axios](https://axios-http.com/) – Consumo da API interna (`/app/api`)
+- 🍪 [cookie](https://www.npmjs.com/package/cookie) – Armazenamento seguro do JWT em cookies (nada de localStorage 🚫)
+- 🔑 [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) – Autenticação JWT
+- 📦 [Prisma ORM](https://www.prisma.io/) – ORM com suporte a SQLite e PostgreSQL
+- 🪶 [Supabase](https://supabase.com/) – Banco de dados em produção
+- 🧪 [Framer Motion](https://www.framer.com/motion/) – Animações fluidas
+- 📊 [react-syntax-highlighter](https://github.com/react-syntax-highlighter/react-syntax-highlighter) – Exibição de código
+- 🔁 [react-hook-form](https://react-hook-form.com/) e [zod](https://zod.dev/) – Manipulação de formulários
+- 🔑 [nanoid](https://github.com/ai/nanoid) – Geração de chaves de API
+- 🔔 [React Toastify](https://fkhadra.github.io/react-toastify/) – Feedbacks para o usuário
+- 🎨 [lucide-react](https://lucide.dev/) e [react-icons](https://react-icons.github.io/react-icons/) – Ícones dinâmicos
+
+---
+
+## 📦 Estrutura do Projeto
+
+O projeto segue uma arquitetura **componentizada e modular**, com separação clara de responsabilidades:
+
+- `/app` – Páginas, rotas e API interna
+- `/components` – Componentes reutilizáveis e estilizados
+- `/lib` – Helpers e utilitários
+- `/prisma` – Configuração do ORM e schema do banco
+- `/providers/AuthContext` – Contexto global para autenticação e usuário
+
+---
+
+## 🔐 Autenticação e Segurança
+
+- A autenticação é feita via **JWT**, armazenado **em cookies** para maior segurança (evitando XSS).
+- O envio do token JWT é automatizado via interceptor do Axios, com withCredentials: true.
+  Isso significa que todas as requisições autenticadas já incluem o token de forma automática, sem necessidade de configurar manualmente os headers.
+- O **Context API** é utilizado para manter o estado do usuário em memória.
+- As rotas da API são protegidas e requerem validação do token.
+
+---
+
+## 🧪 Executando o Projeto Localmente
+
+## 📋 Pré-requisitos
+
+Antes de rodar o projeto localmente, certifique-se de ter instalado:
+
+- 🟢 **Node.js v20+**
+- 📦 **npm** ou **yarn**
+- 🛠️ [Git](https://git-scm.com/) (para clonar o repositório)
+
+### 1. Clonar o repositório (Node )
+
+```bash
+git clone https://github.com/seu-usuario/dev-random.git
+cd dev-random
+```
+
+### 2. Instalar dependências
+
+```bash
+npm install
+# ou
+yarn install
+```
+
+### 3. Ajustar o `schema.prisma` para usar SQLite localmente
+
+Por padrão, o projeto usa PostgreSQL. Para desenvolvimento local, altere o arquivo **`prisma/schema.prisma`**:
+
+```prisma
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+```
+
+Depois, rode a migration:
+
+```bash
+npx prisma migrate dev
+```
+
+### 4. Criar o arquivo `.env`
+
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
+
+```env
+NEXT_PUBLIC_API_BASE_URL="http://localhost:3000/api"
+NODE_ENV="development"
+JWT_SECRET="sua_chave_segura_aqui"
+ALLOWED_REGISTER_MANY_API_KEYS=false
+```
+
+> 🔑 Obs: Crie um valor único e forte para `JWT_SECRET`.
+
+### 5. Rodar o projeto
 
 ```bash
 npm run dev
-# or
+# ou
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+O projeto estará disponível em:
+👉 `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📡 API
 
-## Learn More
+A API do **DevRandom** está disponível no endpoint:
 
-To learn more about Next.js, take a look at the following resources:
+```
+https://dev-random.vercel.app/api
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Com ela, você pode gerar dados aleatórios diretamente no seu backend, sem precisar usar a interface web.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## ⭐ Sobre o Projeto
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+O **DevRandom** nasceu com a ideia de **facilitar a vida de desenvolvedores** durante testes, desenvolvimento de features e criação de protótipos.
+Totalmente gratuito e com foco em **performance, usabilidade e segurança**, ele evoluirá constantemente com mais recursos e melhorias.

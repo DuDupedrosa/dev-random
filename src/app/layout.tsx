@@ -1,10 +1,10 @@
-import type { Metadata } from 'next';
-import './globals.css';
-import { Toaster } from 'sonner';
+import type { Metadata } from "next";
+import "./globals.css";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  title: 'DevRandom',
-  description: 'Gerador de dados aleatórios',
+  title: "DevRandom",
+  description: "Gerador de dados aleatórios",
 };
 
 export default function RootLayout({
@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt">
       <body className="font-funnel-display">
         {children}
         <Toaster richColors={true} position="top-center" />

@@ -1,4 +1,4 @@
-import { PlanTypeEnum } from '../enums/planTypeEnum';
+import { PlanTypeEnum } from "../enums/planTypeEnum";
 
 export function getFreeRequestsCount(count: number, planType: number) {
   if (planType === PlanTypeEnum.FREE.TYPE) {
@@ -17,9 +17,8 @@ export function getTotalRequestsCount(planType: number) {
 }
 
 export function getPercentageUsage(planType: number, count: number) {
-  return getTotalRequestsCount(planType) > 0
-    ? (count / getTotalRequestsCount(planType)) * 100
-    : 0;
+  const total = getTotalRequestsCount(planType);
+  return total > 0 ? Math.floor((count / total) * 100) : 0;
 }
 
 export function userExceededLimit(planType: number, count: number) {
