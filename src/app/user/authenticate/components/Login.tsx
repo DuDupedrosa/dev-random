@@ -83,7 +83,11 @@ export default function Login() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Seu email" {...field} />
+                <Input
+                  data-test="Login:Email"
+                  placeholder="Seu email"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -98,6 +102,7 @@ export default function Login() {
               <FormControl>
                 <div className="relative">
                   <Input
+                    data-test="Login:Password"
                     placeholder="Sua senha"
                     type={showPassword ? 'text' : 'password'}
                     {...field}
@@ -123,6 +128,7 @@ export default function Login() {
         {alert && alert.show && <AlertError text={alert.message} />}
 
         <Button
+          data-test="Login:Submit"
           disabled={loading}
           type="submit"
           className="w-full md:w-1/2 cursor-pointer"

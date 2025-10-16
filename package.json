@@ -57,6 +57,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-syntax-highlighter": "^15.5.13",
+    "cypress": "^15.4.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
     "jest": "^30.2.0",

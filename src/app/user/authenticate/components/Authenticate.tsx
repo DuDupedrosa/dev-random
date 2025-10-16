@@ -68,12 +68,17 @@ export default function Authenticate() {
                 <Tabs defaultValue="login" className="w-full">
                   <TabsList className="w-full ">
                     <TabsTrigger
+                      data-test="Authenticate:Login"
                       value="login"
                       className="cursor-pointer data-[state=active]:shadow"
                     >
                       Entrar
                     </TabsTrigger>
-                    <TabsTrigger value="register" className="cursor-pointer">
+                    <TabsTrigger
+                      data-test="Authenticate:Register"
+                      value="register"
+                      className="cursor-pointer"
+                    >
                       Cadastrar
                     </TabsTrigger>
                   </TabsList>

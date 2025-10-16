@@ -1,5 +1,6 @@
 import { documentsEnum } from '@/shared/enums/documentsEnum';
 import { generateRandomDocument } from '@/shared/helpers/generateRandomDocumentHelper';
+import { expect } from '@jest/globals';
 
 describe('generateRandomDocument', () => {
   const documentTypes = Object.values(documentsEnum);

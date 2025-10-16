@@ -11,6 +11,11 @@ const customJestConfig = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
+  globals: {
+    'ts-jest': {
+      tsconfig: 'tsconfig.jest.json', // <-- aqui você aponta pro tsconfig do Jest
+    },
+  },
 };
 
 module.exports = createJestConfig(customJestConfig);

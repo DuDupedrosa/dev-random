@@ -1,5 +1,6 @@
 import { PlanTypeEnum } from '@/shared/enums/planTypeEnum';
 import { userExceededLimit } from '@/shared/helpers/usageHelper';
+import { expect } from '@jest/globals';
 
 describe('userExceededLimit', () => {
   const plans = Object.values(PlanTypeEnum);

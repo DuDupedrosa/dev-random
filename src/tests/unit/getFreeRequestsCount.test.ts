@@ -1,5 +1,6 @@
 import { PlanTypeEnum } from '@/shared/enums/planTypeEnum';
 import { getFreeRequestsCount } from '@/shared/helpers/usageHelper';
+import { expect } from '@jest/globals';
 
 describe('getFreeRequestsCount', () => {
   const plans = Object.values(PlanTypeEnum);

@@ -90,7 +90,11 @@ export default function Register() {
             <FormItem>
               <FormLabel>Nome</FormLabel>
               <FormControl>
-                <Input placeholder="Seu nome" {...field} />
+                <Input
+                  data-test="Register:Name"
+                  placeholder="Seu nome"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -103,7 +107,11 @@ export default function Register() {
             <FormItem>
               <FormLabel>Sobrenome</FormLabel>
               <FormControl>
-                <Input placeholder="Seu sobrenome" {...field} />
+                <Input
+                  data-test="Register:LastName"
+                  placeholder="Seu sobrenome"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -116,9 +124,13 @@ export default function Register() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Seu email" {...field} />
+                <Input
+                  data-test="Register:Email"
+                  placeholder="Seu email"
+                  {...field}
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage data-test="Register:Email:FormMessage" />
             </FormItem>
           )}
         />
@@ -131,6 +143,7 @@ export default function Register() {
               <FormControl>
                 <div className="relative">
                   <Input
+                    data-test="Register:Password"
                     placeholder="Sua senha"
                     type={showPassword ? 'text' : 'password'}
                     {...field}
@@ -148,7 +161,7 @@ export default function Register() {
                   )}
                 </div>
               </FormControl>
-              <FormMessage />
+              <FormMessage data-test="Register:Password:FormMessage" />
             </FormItem>
           )}
         />
@@ -156,6 +169,7 @@ export default function Register() {
         {alert && alert.show && <AlertError text={alert.message} />}
 
         <Button
+          data-test="Register:Submit"
           disabled={loading}
           type="submit"
           className="w-full md:w-1/2 cursor-pointer"
