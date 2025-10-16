@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals';
 import { copyToClipboard } from '@/shared/helpers/copyToClipboardHelper';
 
 describe('copyToClipboard', () => {

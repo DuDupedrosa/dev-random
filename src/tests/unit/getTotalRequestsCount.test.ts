@@ -1,5 +1,6 @@
 import { PlanTypeEnum } from '@/shared/enums/planTypeEnum';
 import { getTotalRequestsCount } from '@/shared/helpers/usageHelper';
+import { expect } from '@jest/globals';
 
 describe('getTotalRequestsCount', () => {
   it('Should be return the request limit per plan - FREE', () => {
