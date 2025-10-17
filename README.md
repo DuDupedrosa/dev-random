@@ -39,37 +39,97 @@ O projeto segue uma arquitetura **componentizada e modular**, com separação cl
 - `/lib` – Helpers e utilitários
 - `/prisma` – Configuração do ORM e schema do banco
 - `/providers/AuthContext` – Contexto global para autenticação e usuário
+- `/tests` – Testes unitários e de integração
+- `/cypress` – Testes E2E
 
 ---
 
 ## 🔐 Autenticação e Segurança
 
 - A autenticação é feita via **JWT**, armazenado **em cookies** para maior segurança (evitando XSS).
-- O envio do token JWT é automatizado via interceptor do Axios, com withCredentials: true.
+- O envio do token JWT é automatizado via interceptor do Axios, com `withCredentials: true`.
   Isso significa que todas as requisições autenticadas já incluem o token de forma automática, sem necessidade de configurar manualmente os headers.
 - O **Context API** é utilizado para manter o estado do usuário em memória.
 - As rotas da API são protegidas e requerem validação do token.
 
 ---
 
-## 🧪 Executando o Projeto Localmente
+## 🧪 Testes
 
-## 📋 Pré-requisitos
+O projeto conta com duas camadas de testes automatizados: **unitários** (Jest) e **end-to-end (E2E)** (Cypress).
+
+### 🔹 Testes Unitários (Jest)
+
+Os testes unitários foram implementados com **[Jest](https://jestjs.io/)**, cobrindo **todos os helpers e funções utilitárias** da plataforma.
+Eles garantem que as funções isoladas do sistema se comportem conforme o esperado.
+
+#### ▶️ Executando os testes unitários:
+
+```bash
+npm test
+```
+
+O Jest será executado automaticamente e exibirá o relatório de sucesso ou falha dos testes.
+
+---
+
+### 🔹 Testes End-to-End (Cypress)
+
+Os testes E2E foram criados com **[Cypress](https://www.cypress.io/)** para validar **o fluxo completo da aplicação**, simulando a interação de um usuário real.
+
+Antes de executar o Cypress, é necessário criar um arquivo de configuração com as credenciais de um usuário válido da plataforma.
+
+#### 1️⃣ Criar o arquivo `user.json` dentro de `cypress/fixtures/`
+
+```
+cypress/fixtures/user.json
+```
+
+O conteúdo deve seguir o formato abaixo:
+
+```json
+{
+  "email": "seu_email@exemplo.com",
+  "password": "sua_senha"
+}
+```
+
+> ⚠️ Certifique-se de que o usuário informado realmente exista na plataforma.
+
+#### 2️⃣ Rodar os testes E2E
+
+Para executar os testes automaticamente (modo headless):
+
+```bash
+npx cypress run
+```
+
+Ou para abrir o **modo interativo** (útil para visualizar o fluxo no navegador):
+
+```bash
+npx cypress open
+```
+
+---
+
+## 💻 Executando o Projeto Localmente
+
+### 📋 Pré-requisitos
 
 Antes de rodar o projeto localmente, certifique-se de ter instalado:
 
 - 🟢 **Node.js v20+**
 - 📦 **npm** ou **yarn**
-- 🛠️ [Git](https://git-scm.com/) (para clonar o repositório)
+- 🛠️ [Git](https://git-scm.com/)
 
-### 1. Clonar o repositório (Node )
+### 1️⃣ Clonar o repositório
 
 ```bash
 git clone https://github.com/seu-usuario/dev-random.git
 cd dev-random
 ```
 
-### 2. Instalar dependências
+### 2️⃣ Instalar dependências
 
 ```bash
 npm install
@@ -77,7 +137,7 @@ npm install
 yarn install
 ```
 
-### 3. Ajustar o `schema.prisma` para usar SQLite localmente
+### 3️⃣ Ajustar o `schema.prisma` para usar SQLite localmente
 
 Por padrão, o projeto usa PostgreSQL. Para desenvolvimento local, altere o arquivo **`prisma/schema.prisma`**:
 
@@ -94,7 +154,7 @@ Depois, rode a migration:
 npx prisma migrate dev
 ```
 
-### 4. Criar o arquivo `.env`
+### 4️⃣ Criar o arquivo `.env`
 
 Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
@@ -105,9 +165,9 @@ JWT_SECRET="sua_chave_segura_aqui"
 ALLOWED_REGISTER_MANY_API_KEYS=false
 ```
 
-> 🔑 Obs: Crie um valor único e forte para `JWT_SECRET`.
+> 🔑 Crie um valor único e forte para `JWT_SECRET`.
 
-### 5. Rodar o projeto
+### 5️⃣ Rodar o projeto
 
 ```bash
 npm run dev
