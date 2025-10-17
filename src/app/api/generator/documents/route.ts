@@ -9,6 +9,16 @@ import { apiKeyMessages } from '../../helpers/messages/apiKeyMessages';
 
 const validDocumentsTypes = Object.values(documentsEnum) as number[];
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+};
+
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
+}
+
 export async function GET(request: NextRequest) {
   try {
     const apiKey = request.headers.get('x-api-key');
@@ -16,7 +26,7 @@ export async function GET(request: NextRequest) {
     if (!apiKey) {
       return NextResponse.json(
         { message: apiKeyMessages.MISSING_HEADER },
-        { status: httpStatusEnum.BAD_REQUEST }
+        { status: httpStatusEnum.BAD_REQUEST, headers: CORS_HEADERS }
       );
     }
 
@@ -28,14 +38,14 @@ export async function GET(request: NextRequest) {
     if (!findApiKey) {
       return NextResponse.json(
         { message: apiKeyMessages.INVALID_KEY },
-        { status: httpStatusEnum.BAD_REQUEST }
+        { status: httpStatusEnum.BAD_REQUEST, headers: CORS_HEADERS }
       );
     }
 
     if (!findApiKey.active) {
       return NextResponse.json(
         { message: apiKeyMessages.INACTIVE_KEY },
-        { status: httpStatusEnum.BAD_REQUEST }
+        { status: httpStatusEnum.BAD_REQUEST, headers: CORS_HEADERS }
       );
     }
 
@@ -43,7 +53,7 @@ export async function GET(request: NextRequest) {
     if (!documentTypeParam) {
       return NextResponse.json(
         { message: 'Required query param documentType' },
-        { status: httpStatusEnum.BAD_REQUEST }
+        { status: httpStatusEnum.BAD_REQUEST, headers: CORS_HEADERS }
       );
     }
 
@@ -55,7 +65,7 @@ export async function GET(request: NextRequest) {
             documentsEnum
           )}`,
         },
-        { status: httpStatusEnum.BAD_REQUEST }
+        { status: httpStatusEnum.BAD_REQUEST, headers: CORS_HEADERS }
       );
     }
 
@@ -66,7 +76,7 @@ export async function GET(request: NextRequest) {
           message:
             'Invalid query param mask. Only mask = true or mask = false are valid.',
         },
-        { status: httpStatusEnum.BAD_REQUEST }
+        { status: httpStatusEnum.BAD_REQUEST, headers: CORS_HEADERS }
       );
     }
 
@@ -97,7 +107,7 @@ export async function GET(request: NextRequest) {
           {
             message: apiKeyMessages.MAX_LIMIT_PLAN,
           },
-          { status: httpStatusEnum.BAD_REQUEST }
+          { status: httpStatusEnum.BAD_REQUEST, headers: CORS_HEADERS }
         );
       }
 
@@ -116,12 +126,12 @@ export async function GET(request: NextRequest) {
           mask ? mask === 'true' : true
         ),
       },
-      { status: httpStatusEnum.OK }
+      { status: httpStatusEnum.OK, headers: CORS_HEADERS }
     );
   } catch (err) {
     return NextResponse.json(
       { message: `InternalServerError|Generator|Documents|Error: ${err}` },
-      { status: httpStatusEnum.INTERNAL_SERVER_ERROR }
+      { status: httpStatusEnum.INTERNAL_SERVER_ERROR, headers: CORS_HEADERS }
     );
   }
 }
